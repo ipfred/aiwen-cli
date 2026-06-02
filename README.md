@@ -1,6 +1,7 @@
 # aw-cli
 
-AIWEN/IPPlus360 IP 情报查询 CLI，支持 IPv4/IPv6 地理定位、当前网络 IP、应用场景、WHOIS、AS 映射、宿主信息、风险画像、真人/机器流量判断和行业分类。
+[埃文科技](https://www.ipplus360.com/) 官方的IP地址信息查询 CLI，支持 IPv4/IPv6定位、当前网络IP位置、IP场景消息、WHOIS、AS域名、宿主信息、IP风险画像、IP真假人和IPv4行业分类等信息查询。内置主流Agent工具开箱即用的Skills。
+
 
 ## 安装
 

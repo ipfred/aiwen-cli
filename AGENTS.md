@@ -26,8 +26,6 @@ This project must model its CLI architecture, build pipeline, npm installer, and
 
 Reference sources:
 
-- Upstream repository: https://github.com/larksuite/cli
-- Local checkout for implementation reference: `E:\my_work\github_pro\cli`
 
 Before changing CLI architecture, npm installation, binary packaging, release workflow, or skills installation, inspect the matching files in the local `larksuite/cli` checkout and keep this project structurally aligned unless there is a documented product-specific reason to diverge.
 
