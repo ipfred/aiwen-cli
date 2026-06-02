@@ -349,9 +349,9 @@ if (require.main === module) {
       `\nIf you are behind a firewall or in a restricted network, try one of:\n` +
       `  # 1. Use a proxy:\n` +
       `  export https_proxy=http://your-proxy:port\n` +
-      `  npm install -g @fredzhang/aiwen-cli\n\n` +
+      `  npm install -g aiwen-geoip-cli\n\n` +
       `  # 2. Point to a corporate npm mirror that proxies /-/binary/aw-cli/...:\n` +
-      `  npm install -g @fredzhang/aiwen-cli --registry=https://your-corp-mirror/`
+      `  npm install -g aiwen-geoip-cli --registry=https://your-corp-mirror/`
     );
     process.exit(1);
   }

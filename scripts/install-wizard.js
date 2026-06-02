@@ -5,7 +5,7 @@ const path = require("path");
 const { execFileSync, execFile } = require("child_process");
 const p = require("@clack/prompts");
 
-const PKG = "@fredzhang/aiwen-cli";
+const PKG = "aiwen-geoip-cli";
 const SKILLS_REPO = "ipfred/aiwen-cli";
 const isWindows = process.platform === "win32";
 
@@ -140,7 +140,7 @@ function whichAwCli() {
   }
 }
 
-/** Get the latest version of @fredzhang/aiwen-cli from the registry. Returns version or null. */
+/** Get the latest version of aiwen-geoip-cli from the registry. Returns version or null. */
 function getLatestVersion() {
   try {
     const out = runSilent("npm", ["view", PKG, "version"], { timeout: 15000 });
@@ -162,7 +162,7 @@ function semverLessThan(a, b) {
   return false;
 }
 
-/** Check whether @fredzhang/aiwen-cli is truly installed in npm global prefix. Returns version or null. */
+/** Check whether aiwen-geoip-cli is truly installed in npm global prefix. Returns version or null. */
 function getGloballyInstalledVersion() {
   try {
     const out = runSilent("npm", ["list", "-g", PKG], { timeout: 15000 });

@@ -1,5 +1,5 @@
 {
-  "name": "@fredzhang/aiwen-cli",
+  "name": "aiwen-geoip-cli",
   "version": "0.1.0",
   "description": "AIWEN/IPPlus360 IP intelligence CLI - query IP geolocation, WHOIS, risk scoring, and more",
   "bin": {

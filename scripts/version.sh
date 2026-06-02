@@ -1,27 +1,29 @@
 #!/usr/bin/env bash
 #
-# version.sh — bump version and create git tag, similar to npm version
+# version.sh — bump version in package.json, commit, and create git tag.
+# package.json is the single source of truth for the version.
 #
 # Usage:
-#   ./scripts/version.sh patch   # 0.1.0 -> 0.1.1
-#   ./scripts/version.sh minor   # 0.1.0 -> 0.2.0
-#   ./scripts/version.sh major   # 1.0.0 -> 2.0.0
-#   ./scripts/version.sh 1.2.3  # set specific version
+#   ./scripts/version.sh patch       # 0.1.0 -> 0.1.1
+#   ./scripts/version.sh minor       # 0.1.0 -> 0.2.0
+#   ./scripts/version.sh major       # 1.0.0 -> 2.0.0
+#   ./scripts/version.sh 1.2.3      # set explicit version
 #
 # This script:
-#   1. Reads current version from VERSION file
+#   1. Reads current version from package.json
 #   2. Bumps according to semver rule
-#   3. Updates VERSION file
+#   3. Updates package.json
 #   4. Commits and creates git tag v<version>
+#   5. Pushes commit and tag to remote
 #
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-VERSION_FILE="$PROJECT_DIR/VERSION"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+PACKAGE_JSON="$PROJECT_DIR/package.json"
 
 current_version() {
-  cat "$VERSION_FILE"
+  node -p "require('$PACKAGE_JSON').version"
 }
 
 bump_version() {
@@ -70,24 +72,61 @@ RULE="$1"
 CURRENT="$(current_version)"
 NEW="$(bump_version "$CURRENT" "$RULE")"
 
-echo "Bumping version: $CURRENT -> $NEW"
-echo "$NEW" > "$VERSION_FILE"
-
-cd "$PROJECT_DIR"
-
-if git diff --quiet VERSION; then
-  echo "Version unchanged."
+if [ "$CURRENT" = "$NEW" ]; then
+  echo "Version unchanged: $CURRENT"
   exit 0
 fi
 
-git add VERSION
+echo "Bumping version: $CURRENT -> $NEW"
+
+cd "$PROJECT_DIR"
+
+# Update package.json version using npm version (handles the commit + tag)
+# If npm is not available, fall back to manual update
+if command -v npm &>/dev/null; then
+  npm version "$NEW" --no-git-tag-version 2>/dev/null || true
+fi
+
+# Verify package.json was updated
+UPDATED="$(current_version)"
+if [ "$UPDATED" != "$NEW" ]; then
+  # Manual fallback — use node to update package.json
+  node -e "
+    const fs = require('fs');
+    const pkg = require('$PACKAGE_JSON');
+    pkg.version = '$NEW';
+    fs.writeFileSync('$PACKAGE_JSON', JSON.stringify(pkg, null, 2) + '\n');
+  "
+fi
+
+echo "Updated package.json to v$NEW"
+
+# Check if package.json has uncommitted changes
+if git diff --quiet package.json; then
+  echo "package.json unchanged."
+  exit 0
+fi
+
+# Commit
+git add package.json
 git commit -m "chore: bump version to v$NEW"
-git tag "v$NEW"
+
+# Create tag
+TAG="v$NEW"
+
+# Check if tag already exists
+if git rev-parse "$TAG" >/dev/null 2>&1; then
+  echo "Tag $TAG already exists locally, skipping."
+else
+  git tag "$TAG"
+  echo "Created tag $TAG"
+fi
 
 echo ""
 echo "Version updated to v$NEW"
 echo ""
-echo "Next steps:"
-echo "  git push && git push --tags          # push commit and tag"
-echo "  # or push tag to trigger CI release:"
-echo "  git push origin v$NEW"
+echo "Pushing commit and tag to remote..."
+git push && git push origin "$TAG"
+
+echo ""
+echo "Done. CI will build and publish v$NEW."

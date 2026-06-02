@@ -120,11 +120,11 @@ jobs:
 
             ### Fast Install
             ```bash
-            npx @fredzhang/aiwen-cli@latest install
+            npx aiwen-geoip-cli@latest install
             ```
             or
             ```bash
-            npm install -g @fredzhang/aiwen-cli
+            npm install -g aiwen-geoip-cli
             ```
 
             ### Manual Downloads
