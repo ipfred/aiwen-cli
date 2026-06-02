@@ -3,7 +3,7 @@ COMMIT   := $(shell git rev-parse --short HEAD 2>/dev/null || echo none)
 DATE     := $(shell date -u '+%Y-%m-%dT%H:%M:%SZ')
 LDFLAGS  := -s -w -X github.com/aiwen/aw-cli/internal/build.Version=$(VERSION) -X github.com/aiwen/aw-cli/internal/build.Commit=$(COMMIT) -X github.com/aiwen/aw-cli/internal/build.Date=$(DATE)
 
-.PHONY: test fmt build build-all clean version patch minor major
+.PHONY: test fmt build build-all archives release clean version patch minor major
 
 test:
 	go test ./...
@@ -28,8 +28,47 @@ build-darwin:
 	GOOS=darwin  GOARCH=amd64 go build -ldflags "$(LDFLAGS)" -o dist/aw-cli_$(VERSION)_darwin_amd64 .
 	GOOS=darwin  GOARCH=arm64 go build -ldflags "$(LDFLAGS)" -o dist/aw-cli_$(VERSION)_darwin_arm64 .
 
+# Package binaries into archives for npm install script (npx @aiwen/aw-cli)
+archives: build-all
+	cd dist && \
+	rm -f checksums.txt && \
+	for f in aw-cli_$(VERSION)_linux_* aw-cli_$(VERSION)_darwin_*; do \
+		if [ -f "$$f" ]; then \
+			base="$${f#aw-cli_$(VERSION)_}"; \
+			os="$${base%_*}"; \
+			arch="$${base##*_}"; \
+			archive="aw-cli-$(VERSION)-$${os}-$${arch}.tar.gz"; \
+			tmpdir="$$(mktemp -d)"; \
+			cp "$$f" "$$tmpdir/aw-cli"; \
+			tar -C "$$tmpdir" -czf "$$archive" aw-cli; \
+			rm -rf "$$tmpdir"; \
+		fi; \
+	done && \
+	for f in aw-cli_$(VERSION)_windows_*.exe; do \
+		if [ -f "$$f" ]; then \
+			base="$${f#aw-cli_$(VERSION)_}"; \
+			base="$${base%.exe}"; \
+			os="$${base%_*}"; \
+			arch="$${base##*_}"; \
+			archive="aw-cli-$(VERSION)-$${os}-$${arch}.zip"; \
+			archive_path="$$PWD/$$archive"; \
+			tmpdir="$$(mktemp -d)"; \
+			cp "$$f" "$$tmpdir/aw-cli.exe"; \
+			(cd "$$tmpdir" && zip "$$archive_path" aw-cli.exe); \
+			rm -rf "$$tmpdir"; \
+		fi; \
+	done && \
+	for archive in aw-cli-$(VERSION)-*.tar.gz aw-cli-$(VERSION)-*.zip; do \
+		if [ -f "$$archive" ]; then \
+			shasum -a 256 "$$archive" >> checksums.txt; \
+		fi; \
+	done
+
+# Full release build (binaries + archives + checksums)
+release: build-all archives
+
 clean:
-	rm -rf dist/ aw-cli aw-cli.exe
+	rm -rf dist/ aw-cli aw-cli.exe bin/ node_modules/
 
 version:
 	@echo $(VERSION)
