@@ -1,5 +1,5 @@
 ---
-name: aw-cli-query
+name: aw-geoip
 version: 1.0.0
 description: "AIWEN/IPPlus360 IP intelligence query skill. Query IPv4/IPv6 geolocation, current network IP, usage scene, WHOIS, AS mapping, host info, risk portrait, identity check, and industry classification via the aw-cli CLI. Use when users ask to look up IP location, ISP, ownership, risk scoring, bot/human detection, or batch IP intelligence."
 metadata:
@@ -8,7 +8,7 @@ metadata:
   cliHelp: "aw-cli --help"
 ---
 
-# aw-cli-query Skill
+# aw-geoip Skill
 
 Use the `aw-cli` CLI to query IP intelligence. Never guess or fabricate IP query results.
 
