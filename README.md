@@ -5,7 +5,7 @@
 
 ## 安装
 
-### 方式一：npx 一键安装和配置（推荐）
+### 🚀方式一：npx 一键安装和配置（推荐）
 
 适合普通用户首次安装。该命令会启动安装向导：安装/升级全局 `aiwen-geoip-cli`，配置 API Key，并把 AI Skills 安装到本机。
 
@@ -62,12 +62,8 @@ aw-cli config set api_key YOUR_API_KEY
 
    Windows 需要把 `C:\Tools\aw-cli` 加入系统或用户 `PATH`。
 
-3. 安装 Skills 到本机：
-
-   ```bash
-   npx skills add ipfred/aiwen-cli -y -g
-   ```
-
+3. 安装 Skills 到本机： 参考 [独立安装和更新Skills](#独立安装和更新skills)
+  
 4. 配置 API Key 并验证：
 
    ```bash
@@ -99,7 +95,7 @@ skills/aw-geoip/
 
 开发调试时使用这个目录中的 `SKILL.md` 和 `references/`，不需要额外从远程下载 Skills。确保构建出的 `aw-cli` 或 `aw-cli.exe` 在 `PATH` 中，Skill 才能调用 CLI。
 
-### 单独安装和更新 Skills
+### 🎯独立安装和更新Skills
 使用 `npx skills` 安装和更新 Skills
 
 ```bash
@@ -179,7 +175,7 @@ aw-cli config show
 |---|---|---|
 | `aw-cli loc <ip>` | IP 地理定位（城市/区县/街道） | IPv4 / IPv6 |
 | `aw-cli current` | 当前网络出口 IP 定位 | IPv4 / IPv6 |
-| `aw-cli scene <ip>` | IP 应用场景（住宅/数据中心/CDN 等） | IPv4 / IPv6 |
+| `aw-cli scene <ip>` | IP 应用场景（家庭宽带/数据中心/企业专线 等） | IPv4 / IPv6 |
 | `aw-cli whois <ip>` | IP WHOIS 注册信息 | 仅 IPv4 |
 | `aw-cli asn <ip>` | AS 号 / AS WHOIS 映射 | 仅 IPv4 |
 | `aw-cli host <ip>` | IP 宿主归属信息 | 仅 IPv4 |
