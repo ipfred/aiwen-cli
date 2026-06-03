@@ -1,7 +1,7 @@
 {
   "name": "aiwen-geoip-cli",
-  "version": "0.1.0",
-  "description": "AIWEN/IPPlus360 IP intelligence CLI - query IP geolocation, WHOIS, risk scoring, and more",
+  "version": "0.2.0",
+  "description": "AIWEN/IPPlus360 IP intelligence CLI - query IP geolocation, Scene, WHOIS, risk scoring, and more",
   "bin": {
     "aw-cli": "scripts/run.js"
   },

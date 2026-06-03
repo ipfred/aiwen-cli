@@ -1,6 +1,6 @@
 # aw-cli
 
-[埃文科技](https://www.ipplus360.com/) 官方的IP地址信息查询 CLI，支持 IPv4/IPv6定位、当前网络IP位置、IP场景消息、WHOIS、AS域名、宿主信息、IP风险画像、IP真假人和IPv4行业分类等信息查询。内置主流Agent工具开箱即用的Skills。
+[埃文科技](https://www.ipplus360.com/) 官方的IP地址信息查询 CLI，支持 IPv4/IPv6定位、当前网络IP位置、IP场景、WHOIS、AS域名、宿主信息、IP风险画像、IP真假人和IPv4行业分类等信息查询。内置主流Agent工具开箱即用的Skills。
 
 
 ## 安装
@@ -94,10 +94,37 @@ go build -o aw-cli.exe .
 源码目录内已经包含 Skill：
 
 ```text
-skills/aw-cli-query/
+skills/aw-geoip/
 ```
 
 开发调试时使用这个目录中的 `SKILL.md` 和 `references/`，不需要额外从远程下载 Skills。确保构建出的 `aw-cli` 或 `aw-cli.exe` 在 `PATH` 中，Skill 才能调用 CLI。
+
+### 单独安装和更新 Skills
+使用 `npx skills` 安装和更新 Skills
+
+```bash
+# 安装（强制覆盖为最新版本）
+npx skills add ipfred/aiwen-cli -y -g
+
+# 更新所有全局 Skills（推荐）
+npx skills update -g
+
+# 更新项目中安装的 Skills
+npx skills update -p
+
+# 仅更新 aw-cli 相关的 Skills
+npx skills update aw-geoip -g
+
+```
+
+全局安装 (`-g`) 的 Skills 放在用户目录下，所有项目共享；项目级安装的 Skills 放在项目的 `.agents/skills/` 等目录中，随项目提交。
+
+安装作用域对照：
+
+| 方式 | 安装命令 | Skills 位置 | 适用场景 |
+|------|---------|------------|---------|
+| 全局安装 | `npx skills add ipfred/aiwen-cli -y -g` | `~/<agent>/skills/` | 所有项目通用 |
+| 项目安装 | `npx skills add ipfred/aiwen-cli -y` | `./<agent>/skills/` | 随项目提交、团队共享 |
 
 ### 环境依赖
 
@@ -434,4 +461,6 @@ go run . loc 8.8.8.8 --dry-run
 
 ## License
 
-Private — AIWEN/IPPlus360
+This project is licensed under the MIT License. When running, it calls AIWEN/IPPlus360 APIs. To use these APIs, you must comply with the following agreements and privacy policies:
+
+- [埃文科技隐私政策 (AIWEN Privacy Policy)](https://aidata.ipplus360.com/privacy-policy/)
