@@ -6,7 +6,7 @@ const { execFileSync, execFile } = require("child_process");
 const p = require("@clack/prompts");
 
 const PKG = "aiwen-geoip-cli";
-const SKILLS_REPO = "ipfred/aiwen-cli";
+const SKILLS_REPO = "ipfred/aiwen-skills";
 const isWindows = process.platform === "win32";
 
 // ---------------------------------------------------------------------------

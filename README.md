@@ -1,17 +1,21 @@
 # aw-cli
 
-[埃文科技](https://www.ipplus360.com/) 官方的IP地址信息查询 CLI，支持 IPv4/IPv6定位、当前网络IP位置、IP场景、WHOIS、AS域名、宿主信息、IP风险画像、IP真假人和IPv4行业分类等信息查询。内置主流Agent工具开箱即用的Skills。
+[埃文科技](https://www.ipplus360.com/) 官方的IP地址信息查询 CLI，支持 IPv4/IPv6定位、当前网络IP位置、IP场景、WHOIS、AS域名、宿主信息、IP风险画像、IP真假人和IPv4行业分类等信息查询。
 
 
 ## 安装
 
-### 🚀方式一：npx 一键安装和配置（推荐）
+### 方式一：npx 一键安装+配置+Skills（推荐）
 
-适合普通用户首次安装。该命令会启动安装向导：安装/升级全局 `aiwen-geoip-cli`，配置 API Key，并把 AI Skills 安装到本机。
+适合普通用户首次安装。该命令会启动交互式安装向导，并完成三件事：
 
 ```bash
 npx aiwen-geoip-cli@latest install
 ```
+
+- 安装或升级全局 CLI：`aiwen-geoip-cli`
+- 配置 API Key
+- 从独立的 [aiwen-skills](https://github.com/ipfred/aiwen-skills) 仓库拉取并安装 AI Skills
 
 安装完成后验证：
 
@@ -26,7 +30,18 @@ aw-cli loc 8.8.8.8 --dry-run
 aw-cli config set api_key YOUR_API_KEY
 ```
 
-### 方式二：从 GitHub Release 手动安装 CLI 和 Skills
+### 方式二：只安装 CLI 工具
+
+适合只需要使用 `aw-cli` 命令，或希望自己管理 API Key 和 Skills 的场景。
+
+```shell
+npm install -g aiwen-geoip-cli
+aw-cli --version
+#  配置key
+aw-cli config set api_key YOUR_API_KEY
+```
+
+### 方式三：从 GitHub Release 手动安装 CLI
 
 适合不能直接通过 npm 下载二进制包，或需要手动分发到内网机器的场景。
 
@@ -62,70 +77,29 @@ aw-cli config set api_key YOUR_API_KEY
 
    Windows 需要把 `C:\Tools\aw-cli` 加入系统或用户 `PATH`。
 
-3. 安装 Skills 到本机： 参考 [独立安装和更新Skills](#独立安装和更新skills)
-  
-4. 配置 API Key 并验证：
+3. 配置 API Key 并验证：
 
    ```bash
    aw-cli config set api_key YOUR_API_KEY
    aw-cli --version
    ```
 
-### 方式三：从源码构建，并使用源码内置 Skills
 
-适合开发、调试或需要本地修改 CLI/Skills 的场景。
+### AI Skills安装
 
-```bash
-git clone https://github.com/ipfred/aiwen-cli.git
-cd aiwen-cli
-go build -o aw-cli .
-```
-
-Windows 构建：
-
-```powershell
-go build -o aw-cli.exe .
-```
-
-源码目录内已经包含 Skill：
-
-```text
-skills/aw-geoip/
-```
-
-开发调试时使用这个目录中的 `SKILL.md` 和 `references/`，不需要额外从远程下载 Skills。确保构建出的 `aw-cli` 或 `aw-cli.exe` 在 `PATH` 中，Skill 才能调用 CLI。
-
-### 🎯独立安装和更新Skills
-使用 `npx skills` 安装和更新 Skills
-
-```bash
-# 安装（强制覆盖为最新版本）
-npx skills add ipfred/aiwen-cli -y -g
-
-# 更新所有全局 Skills（推荐）
-npx skills update -g
-
-# 更新项目中安装的 Skills
-npx skills update -p
-
-# 仅更新 aw-cli 相关的 Skills
-npx skills update aw-geoip -g
-
-```
-
-全局安装 (`-g`) 的 Skills 放在用户目录下，所有项目共享；项目级安装的 Skills 放在项目的 `.agents/skills/` 等目录中，随项目提交。
-
-安装作用域对照：
-
-| 方式 | 安装命令 | Skills 位置 | 适用场景 |
-|------|---------|------------|---------|
-| 全局安装 | `npx skills add ipfred/aiwen-cli -y -g` | `~/<agent>/skills/` | 所有项目通用 |
-| 项目安装 | `npx skills add ipfred/aiwen-cli -y` | `./<agent>/skills/` | 随项目提交、团队共享 |
+本仓库主要维护 CLI 的安装、配置和功能说明。AI Skills 独立维护在 [ipfred/aiwen-skills](https://github.com/ipfred/aiwen-skills)，安装方式、更新方式、作用域说明和 Skill 使用说明请以该仓库为准。
 
 ### 环境依赖
 
-- Node.js 16+：用于 `npx` 安装向导和 Skills 安装。
+- Node.js 16+：用于 `npm` / `npx` 安装。
 - Go 1.23+：仅源码构建需要。
+
+## 卸载
+
+```shell
+# 卸载cli工具
+npm uninstall -g aiwen-geoip-cli
+```
 
 ## 快速开始
 
